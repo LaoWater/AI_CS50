@@ -1,6 +1,8 @@
 import tkinter as tk
 import math
 
+game_over = False
+
 
 # Function to evaluate the board and return a score based on the current state
 def evaluate(board):
@@ -127,7 +129,6 @@ root.title("Tic-Tac-Toe")
 
 board = [[" " for _ in range(3)] for _ in range(3)]
 buttons = [[None for _ in range(3)] for _ in range(3)]
-game_over = False
 
 label = tk.Label(root, text="Your turn (X)", font=("Helvetica", 16))
 label.grid(row=0, column=0, columnspan=3)

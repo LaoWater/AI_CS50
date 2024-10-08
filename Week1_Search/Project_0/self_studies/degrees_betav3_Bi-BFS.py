@@ -120,10 +120,10 @@ def shortest_path(source, target):
     backward_level = 0
 
     # Keep looping until both frontiers are empty or solution is found
-    while not frontier_forward.empty() and not frontier_backward.empty():
+    while not frontier_forward.empty():
 
         # Expand forward frontier if forward_level <= backward_level
-        if forward_level <= backward_level:
+        if forward_level <= backward_level + 3:
             node_forward = frontier_forward.remove()
             # print(f"Exploring forward node {node_forward.state}")
             explored_nodes += 1
@@ -136,7 +136,7 @@ def shortest_path(source, target):
                 if state not in explored_forward and not frontier_forward.contains_state(state):
                     # print(f"Adding to forward frontier: forward neighbor {state} via action {action}")
                     child_forward = Node(state=state, parent=node_forward, action=action)
-                    if state in explored_backward:
+                    if state in explored_backward or state == target:
                         print(f"Forward path meets backward path at {state}")
                         global_compute_time = time.time() - global_start_time
                         print(f"\nShortest Path compute time: {global_compute_time}")
@@ -148,6 +148,7 @@ def shortest_path(source, target):
 
         # Expand backward frontier only if backward_level < forward_level
         if backward_level < forward_level - 1:
+            print("Boo backward level")
             node_backward = frontier_backward.remove()
             # print(f"Exploring backward node {node_backward.state}")
             explored_nodes += 1
@@ -222,7 +223,7 @@ def construct_bidirectional_path(forward_node, backward_node):
     # For scenarios in which backward path is: many nodes, 1 node, no nodes.
     if len(path_backward) > 1:
         path_backward.append((last_backward_node_action, backward_node.state))  # No action for target
-    else:
+    elif len(path_backward) == 1:
         path_backward.append((last_forward_node_action, backward_node.state))
 
     # 4. Combine forward and backward paths
